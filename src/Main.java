@@ -56,7 +56,6 @@ public class Main extends Application {
         // Add buttons
         Button button1 = new Button();
         button1.setText("Start server");
-        button1.onMouseClickedProperty(test());
         Button button2 = new Button();
         button2.setText("Start client");
 
