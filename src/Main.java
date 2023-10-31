@@ -58,13 +58,13 @@ public class Main extends Application {
         button1.setText("Start server");
         button1.setOnAction((e) -> {
             Game game = new Game();
-            game.startGame(ConnectionType.SERVER);
+            game.showDialog(ConnectionType.SERVER);
         });
         Button button2 = new Button();
         button2.setText("Start client");
         button2.setOnAction((e) -> {
             Game game = new Game();
-            game.startGame(ConnectionType.CLIENT);
+            game.showDialog(ConnectionType.CLIENT);
         });
 
         // Layout for right node in borderpane (for buttons)

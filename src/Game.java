@@ -2,10 +2,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Optional;
 
 public class Game {
-    public void startGame(ConnectionType type) {
+    private Socket socket;
+
+    public void showDialog(ConnectionType type) {
         Dialog<String[]> dialog = new Dialog<>();
         dialog.setTitle("Start " + type);
 
@@ -14,6 +20,11 @@ public class Game {
         Label label1 = new Label("IP-adress: ");
         TextField textField1 = new TextField();
         if (type == ConnectionType.CLIENT) {
+            try {
+                textField1.setText(InetAddress.getLocalHost().getHostAddress());
+            } catch(UnknownHostException e) {
+                textField1.setText("");
+            }
             gridPane.add(label1, 1, i);
             gridPane.add(textField1, 2, i);
             i++;
@@ -44,12 +55,52 @@ public class Game {
         });
 
         Optional<String[]> result = dialog.showAndWait();
+        String[] strings = new String[]{"i shot 6c", "h shot 7b", "m shot 6g", "s shot 5f", "game over"};
+
+        Thread thread;
+
+        Runnable startClient = () -> {
+            Connection connection = new Connection();
+            String string;
+            if (result.isPresent()) {
+                connection.clientConnection(result.get()[0], Integer.parseInt(result.get()[1])) ;
+                try {
+                    for (int j = 1; j < strings.length; j++) {
+                        connection.getWriter().println(strings[j]);
+                        string = connection.getReader().readLine();
+                        System.out.println(string);
+                    }
+                } catch (IOException e) {
+                    e.getMessage();
+                }
+            }
+        };
+
+        Runnable startServer = () -> {
+            Connection connection = new Connection();
+            String string;
+            if (result.isPresent()) {
+                connection.serverConnection(Integer.parseInt(result.get()[0]));
+                try {
+                    string = connection.getReader().readLine();
+                    System.out.println(string);
+                    for (int j = 1; j < strings.length; j+=2) {
+                        string = connection.getReader().readLine();
+                        System.out.println(string);
+                        connection.getWriter().println(strings[j]);
+                    }
+                } catch (IOException e) {
+                    e.getMessage();
+                }
+            }
+        };
 
         if (result.isPresent()) {
             if (type == ConnectionType.CLIENT) {
                 System.out.println("Starter client");
                 System.out.print("IP-adress: " + result.get()[0]);
                 System.out.println(", port: " + result.get()[1]);
+                thread = new Thread(startClient);
             } else {
                 System.out.println("Starter server");
                 System.out.println("Port: " + result.get()[0]);
