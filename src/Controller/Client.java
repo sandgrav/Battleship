@@ -1,29 +1,20 @@
-import javafx.scene.control.Alert;
+package Controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-public class Connection {
+public class Client {
     private PrintWriter writer;
     private BufferedReader reader;
-    public void serverConnection(int port) {
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            Socket socket = serverSocket.accept();
-            writer = new PrintWriter(socket.getOutputStream(), true);
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch(IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    public void clientConnection(String ipAdress, int port) {
+
+    public Client(String ipAdress, int port) {
         try {
             Socket socket = new Socket(ipAdress, port);
+            writer = new PrintWriter(socket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
