@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
+/** Written by Morten Sandgrav **/
+
 public class Dialog {
 
     public void show(GameController gameController) {

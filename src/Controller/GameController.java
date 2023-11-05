@@ -1,11 +1,97 @@
 package Controller;
 
+import Model.Direction;
+import Model.Ships;
+import Model.Shots;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Random;
+
+/** Written by Morten Sandgrav **/
 
 public class GameController {
     ConnectionType connectionType;
     String ipAdress;
     int port;
+    Client client;
+    Server server;
+    PrintWriter writer;
+    BufferedReader reader;
+    Ships ships = new Ships();
+    Shots shots = new Shots();
+    Runnable startClient = () -> {
+        client = new Client(ipAdress, port) ;
+        writer = client.getWriter();
+        reader = client.getReader();
+
+//        try {
+            placeShips();
+            // Koden som ska köras efter klienten är startat
+/*
+        } catch (IOException e) {
+            e.getMessage();
+        }
+*/
+    };
+
+    Runnable startServer = () -> {
+        String string;
+        int j = 1;
+        server = new Server(port);
+//        try {
+            placeShips();
+            // Koden som ska köras efter klienten är startat
+/*
+        } catch (IOException e) {
+            e.getMessage();
+        }
+*/
+    };
+
+    //Om man är server
+    //Starter loop
+
+    //Om man är client
+    //Beräkna skott
+    //Skicka iväg skott
+    //Starter loop
+
+    //Loop
+    //Motta skott
+    //Markera skott
+    //Hit/miss
+    //Beräkna skott
+    //Skicka iväg skott
+
+    public void placeShips() {
+        Random random = new Random();
+        int x;
+        int y;
+        int temp;
+        Direction direction;
+
+        int[] shipsLength = new int[]{5, 4, 4, 3, 3, 3, 2, 2, 2, 2};
+        for (int ship: shipsLength) {
+            do {
+                x = random.nextInt(10);
+                y = random.nextInt(10);
+                direction = Direction.values()[random.nextInt(2)];
+            } while (!ships.placeShip(x, y, ship, direction));
+            System.out.println("Ship placed at (" + x + ", " + y + "), length " + ship + " and riktning " + direction);
+        }
+        System.out.println(ships.toString());
+    }
+
+
+    public ConnectionType getConnectionType() {
+        return connectionType;
+    }
+
+    public void setConnectionType(ConnectionType connectionType) {
+        this.connectionType = connectionType;
+    }
 
     public String getIpAdress() {
         return ipAdress;
@@ -23,19 +109,6 @@ public class GameController {
         this.port = port;
     }
 
-    Client client;
-    Server server;
-
-    String[] strings = new String[]{"i shot 6c", "h shot 7b", "m shot 6g", "s shot 5f", "game over"};
-
-    public ConnectionType getConnectionType() {
-        return connectionType;
-    }
-
-    public void setConnectionType(ConnectionType connectionType) {
-        this.connectionType = connectionType;
-    }
-
     public Runnable getStartClient() {
         return startClient;
     }
@@ -43,54 +116,5 @@ public class GameController {
     public Runnable getStartServer() {
         return startServer;
     }
-
-    Runnable startClient = () -> {
-        String string;
-        int j = 0;
-        client = new Client(ipAdress, port) ;
-        try {
-            while (true) {
-                client.getWriter().println(strings[j]);
-                if (strings[j].equalsIgnoreCase("game over")) {
-                    System.out.println("game over");
-                    break;
-                }
-                string = client.getReader().readLine();
-                if (string.equalsIgnoreCase("game over")) {
-                    System.out.println("game over");
-                    break;
-                }
-                else
-                    System.out.println(string);
-                j+=2;
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-    };
-
-    Runnable startServer = () -> {
-        String string;
-        int j = 1;
-        server = new Server(port);
-        try {
-            while (true) {
-                string = server.getReader().readLine();
-                System.out.println(string);
-                if (string.equalsIgnoreCase("game over")) {
-                    break;
-                }
-                server.getWriter().println(strings[j]);
-                if (strings[j].equalsIgnoreCase("game over")) {
-                    System.out.println("game over");
-                    break;
-                }
-                j+=2;
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-    };
-
 }
 

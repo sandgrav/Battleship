@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/** Written by Morten Sandgrav **/
+
 public class Server {
     private PrintWriter writer;
     private BufferedReader reader;
