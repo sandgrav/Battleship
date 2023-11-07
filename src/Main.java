@@ -1,24 +1,15 @@
-import Controller.GameController;
 import View.GameView;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/** Written by Morten Sandgrav **/
-
 public class Main extends Application {
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        GameController gameController = new GameController();
-        GameView gameView = new GameView(gameController);
+    public void start(Stage primaryStage) {
+        GameView gameView = new GameView();
         gameView.start(primaryStage);
-
-        primaryStage.show();
     }
-
-
 }
