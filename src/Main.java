@@ -1,3 +1,4 @@
+import Controller.GameController;
 import View.GameView;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -9,7 +10,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        GameView gameView = new GameView();
+        GameController gameController = new GameController();
+        GameView gameView = new GameView(gameController);
         gameView.start(primaryStage);
     }
 }

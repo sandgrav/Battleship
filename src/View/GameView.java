@@ -1,5 +1,7 @@
 package View;
 
+import Controller.ConnectionType;
+import Controller.GameController;
 import Model.Ships;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 import java.util.Random;
 //Alexandros Saltsidis
 public class GameView extends Application {
+    GameController gameController;
     private boolean[][] playerBoardBox = new boolean[10][10];
     private boolean[][] enemyBoardBox = new boolean[10][10];
     private boolean gameStarted = false;
@@ -43,6 +46,22 @@ public class GameView extends Application {
         hbox.getChildren().add(playerBoard);
         hbox.getChildren().add(enemyBoard);
 
+        // Add buttons
+        Button button1 = new Button();
+        button1.setText("Start server");
+        button1.setOnAction((e) -> {
+            Dialog dialog = new Dialog();
+            gameController.setConnectionType(ConnectionType.SERVER);
+            dialog.show(gameController);
+        });
+        Button button2 = new Button();
+        button2.setText("Start client");
+        button2.setOnAction((e) -> {
+            Dialog dialog = new Dialog();
+            gameController.setConnectionType(ConnectionType.CLIENT);
+            dialog.show(gameController);
+        });
+/*
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> {
             if (!gameStarted) {
@@ -62,6 +81,9 @@ public class GameView extends Application {
         exitButton.setOnAction(e -> exitGame());
 
         VBox gameControls = new VBox(startButton, exitButton);
+*/
+
+        VBox gameControls = new VBox(button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
         gameControls.setStyle("-fx-padding: 10;");
@@ -108,6 +130,10 @@ public class GameView extends Application {
         }
         boardVBox.getChildren().add(gridPane);
         return boardVBox;
+    }
+
+    public GameView(GameController gameController) {
+        this.gameController = gameController;
     }
 
     private void hideEnemyShips(VBox enemyBoard) {
