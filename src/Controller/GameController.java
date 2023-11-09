@@ -70,6 +70,14 @@ public class GameController {
     //Beräkna skott
     //Skicka iväg skott
 
+        public static int[] generateRandomShot () {
+            Random random = new Random();
+            int x = random.nextInt(10); // Slumpmässig x-koordinat för skott
+            int y = random.nextInt(10); // Slumpmässig y-koordinat för skott
+            int[] shot = {x, y};
+            return shot;
+        }
+
     private void placeShips() {
         Random random = new Random();
         int x;
