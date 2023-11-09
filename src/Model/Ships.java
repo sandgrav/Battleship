@@ -6,13 +6,16 @@ public class Ships extends Board {
     public boolean placeShip(int startX, int startY, int length, Direction direction) {
         int tempX = startX;
         int tempY = startY;
-        int tempLength = length + 1;
+        int tempLength = length;
 
         if (direction == Direction.HORISONTAL) {
-            tempX = startX - 1;
-            if ((startX + length) < 9) {
-                tempLength = length + 2;
-            } else if ((startX + length) > 9) {
+            if (tempX > 0) {
+                tempX--;
+                tempLength++;
+            }
+            if ((tempX + tempLength) < 9) {
+                tempLength++;
+            } else if ((tempX + tempLength) > 9) {
                 return false;
             }
             for (int i = 0; i < tempLength; i++) {
@@ -24,10 +27,13 @@ public class Ships extends Board {
                 board[startX + i][startY] = "S";
             }
         } else {
-            tempY = startY - 1;
-            if ((startY + length) < 9) {
-                tempLength = length + 2;
-            } else if ((startY + length) > 9) {
+            if (tempY > 0){
+                tempY--;
+                tempLength++;
+            }
+            if ((tempY + tempLength) < 9) {
+                tempLength++;
+            } else if ((tempY + tempLength) > 9) {
                 return false;
             }
             for (int i = 0; i < tempLength; i++) {

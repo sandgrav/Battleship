@@ -12,6 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         GameController gameController = new GameController();
         GameView gameView = new GameView(gameController);
+        gameController.setGameView(gameView);
         gameView.start(primaryStage);
     }
 }
