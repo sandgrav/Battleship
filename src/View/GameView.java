@@ -1,7 +1,10 @@
 package View;
 
+import Controller.ConnectionType;
+import Controller.GameController;
 import Model.Ships;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -14,9 +17,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.util.Random;
+
 //Alexandros Saltsidis
 public class GameView extends Application {
+
+    final int NUMROWS = 10;
+    int NUMCOLS = 10;
+    int CELLSIZE = 30;
+    GameController gameController;
+    VBox playerBoard;
+    VBox enemyBoard;
     private boolean[][] playerBoardBox = new boolean[10][10];
     private boolean[][] enemyBoardBox = new boolean[10][10];
     private boolean gameStarted = false;
@@ -31,18 +41,30 @@ public class GameView extends Application {
         HBox hbox = new HBox(200);
         hbox.setAlignment(Pos.CENTER);
 
-        int numRows = 10;
-        int numCols = 10;
-        int cellSize = 50;
-
-        VBox playerBoard = createBoard(numRows, numCols, cellSize, "Player Board");
-        VBox enemyBoard = createBoard(numRows, numCols, cellSize, "Enemy Board");
+        playerBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, "Player Board");
+        enemyBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, "Enemy Board");
         enemyBoard.setManaged(true);
         enemyBoard.setVisible(true);
 
         hbox.getChildren().add(playerBoard);
         hbox.getChildren().add(enemyBoard);
 
+        // Add buttons
+        Button button1 = new Button();
+        button1.setText("Start server");
+        button1.setOnAction((e) -> {
+            Dialog dialog = new Dialog();
+            gameController.setConnectionType(ConnectionType.SERVER);
+            dialog.show(gameController);
+        });
+        Button button2 = new Button();
+        button2.setText("Start client");
+        button2.setOnAction((e) -> {
+            Dialog dialog = new Dialog();
+            gameController.setConnectionType(ConnectionType.CLIENT);
+            dialog.show(gameController);
+        });
+/*
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> {
             if (!gameStarted) {
@@ -62,6 +84,9 @@ public class GameView extends Application {
         exitButton.setOnAction(e -> exitGame());
 
         VBox gameControls = new VBox(startButton, exitButton);
+*/
+
+        VBox gameControls = new VBox(button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
         gameControls.setStyle("-fx-padding: 10;");
@@ -110,6 +135,10 @@ public class GameView extends Application {
         return boardVBox;
     }
 
+    public GameView(GameController gameController) {
+        this.gameController = gameController;
+    }
+
     private void hideEnemyShips(VBox enemyBoard) {
         GridPane enemyGrid = (GridPane) enemyBoard.getChildren().get(1);
         for (int row = 0; row < 10; row++) {
@@ -136,6 +165,24 @@ public class GameView extends Application {
                 }
             }
         }
+    }
+
+    public void markCoordinate(VBox board, int x, int y) {
+        Platform.runLater(() -> {
+            GridPane playerGrid = (GridPane) playerBoard.getChildren().get(1);
+            Rectangle cell = new Rectangle(CELLSIZE, CELLSIZE);
+            cell.setFill(Color.DARKGRAY);
+            cell.setStroke(Color.BLACK);
+            playerGrid.add(cell, x + 1, y + 1);
+        });
+    };
+
+    public VBox getPlayerBoard() {
+        return playerBoard;
+    }
+
+    public VBox getEnemyBoard() {
+        return enemyBoard;
     }
 
     private void exitGame() {

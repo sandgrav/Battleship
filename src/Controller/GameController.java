@@ -3,6 +3,8 @@ package Controller;
 import Model.Direction;
 import Model.Ships;
 import Model.Shots;
+import View.GameView;
+import javafx.application.Platform;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.util.Random;
 /** Written by Morten Sandgrav **/
 
 public class GameController {
+    GameView gameView;
     ConnectionType connectionType;
     String ipAdress;
     int port;
@@ -20,6 +23,7 @@ public class GameController {
     PrintWriter writer;
     BufferedReader reader;
     Ships ships = new Ships();
+
     Shots shots = new Shots();
     Runnable startClient = () -> {
         client = new Client(ipAdress, port) ;
@@ -50,6 +54,7 @@ public class GameController {
 */
     };
 
+
     //Om man är server
     //Starter loop
 
@@ -65,11 +70,10 @@ public class GameController {
     //Beräkna skott
     //Skicka iväg skott
 
-    public void placeShips() {
+    private void placeShips() {
         Random random = new Random();
         int x;
         int y;
-        int temp;
         Direction direction;
 
         int[] shipsLength = new int[]{5, 4, 4, 3, 3, 3, 2, 2, 2, 2};
@@ -80,10 +84,24 @@ public class GameController {
                 direction = Direction.values()[random.nextInt(2)];
             } while (!ships.placeShip(x, y, ship, direction));
             System.out.println("Ship placed at (" + x + ", " + y + "), length " + ship + " and riktning " + direction);
+            for (int i = 0; i < ship; i++) {
+                gameView.markCoordinate(gameView.getPlayerBoard(), x, y);
+                if (direction == Direction.HORISONTAL) {
+                    x++;
+                } else {
+                    y++;
+                }
+            }
         }
-        System.out.println(ships.toString());
+    };
+
+    public GameView getGameView() {
+        return gameView;
     }
 
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
 
     public ConnectionType getConnectionType() {
         return connectionType;
