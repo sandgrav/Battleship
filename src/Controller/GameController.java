@@ -1,8 +1,10 @@
 package Controller;
 
 import Model.Direction;
+import Model.Ship;
 import Model.Ships;
 import Model.Shots;
+import View.Dialog;
 import View.GameView;
 import javafx.application.Platform;
 
@@ -16,6 +18,7 @@ import java.util.Random;
 public class GameController {
     GameView gameView;
     ConnectionType connectionType;
+    boolean firstShot = true;
     String ipAdress;
     int port;
     Client client;
@@ -55,6 +58,9 @@ public class GameController {
     };
 
 
+    private static final char[] yLabels = {'A','B','C','D','E','F','G','H','I','J'};
+
+
     //Om man är server
     //Starter loop
 
@@ -69,6 +75,57 @@ public class GameController {
     //Hit/miss
     //Beräkna skott
     //Skicka iväg skott
+
+    public String[][] shotLogic(String[][] board,int[] shot){
+
+        int x = shot[0] - 1;
+        int y = shot[1] - 1;
+
+        String shotText = "" + shot[0] + yLabels[shot[1]];
+
+
+        if (connectionType == ConnectionType.SERVER){
+            String goal = board[x][y];
+
+            switch (goal){
+                case " ":
+                    System.out.println("m shot " + shotText);
+                    Dialog.showMessage("m shot " + shotText);
+                board[x][y] = "M";
+                break;
+                case "S":
+
+                    Ship ship = ships.getShipsList().stream().filter(s -> s.matchPosition(x,y)).findFirst().get();
+
+                    ship.hitShip();
+
+                    if (ship.getSize() > 0){
+                        System.out.println("h shot " + shotText );
+                        Dialog.showMessage(" h shot " + shotText);
+                        board[x][y] = "H";
+
+                    }
+                    else {
+                        System.out.println("s shot "+ shotText);
+                        Dialog.showMessage("s shot "+ shotText);
+                        board[x][y] = "H";
+                    }
+                    break;
+                default:
+                    System.out.println("wrong");
+                    break;
+            }
+        }
+        else {
+            if (firstShot){
+                System.out.println("i shot " + shotText);
+                Dialog.showMessage("i shot " + shotText);
+            }
+        }
+
+
+        return board;
+    }
 
         public static int[] generateRandomShot () {
             Random random = new Random();
