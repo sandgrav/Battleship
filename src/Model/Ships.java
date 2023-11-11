@@ -1,8 +1,17 @@
 package Model;
 
+import java.util.List;
+
 /** Written by Morten Sandgrav **/
 
 public class Ships extends Board {
+
+    private List<Ship> shipsList;
+
+    public List<Ship> getShipsList(){
+        return this.shipsList;
+    }
+
     public boolean placeShip(int startX, int startY, int length, Direction direction) {
         int tempX = startX;
         int tempY = startY;
@@ -26,6 +35,7 @@ public class Ships extends Board {
             for (int i = 0; i < length; i++) {
                 board[startX + i][startY] = "S";
             }
+            this.shipsList.add(new Ship(new int[]{startX,startY},length,direction));
         } else {
             if (tempY > 0){
                 tempY--;
@@ -44,6 +54,7 @@ public class Ships extends Board {
             for (int i = 0; i < length; i++) {
                 board[startX][startY + i] = "S";
             }
+            this.shipsList.add(new Ship(new int[]{startX,startY},length,direction));
         }
 
         return true;

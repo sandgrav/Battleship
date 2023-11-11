@@ -1,4 +1,5 @@
 import Controller.GameController;
+import View.Dialog;
 import View.GameView;
 import javafx.application.Application;
 import javafx.stage.Stage;

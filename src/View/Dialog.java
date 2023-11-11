@@ -135,4 +135,20 @@ public class Dialog {
             }
         }
     }
+
+
+    public static void showMessage(String message){
+        javafx.scene.control.Dialog<String> dialog = new javafx.scene.control.Dialog();
+
+        dialog.setTitle("Message");
+
+
+        dialog.setContentText(message);
+
+        ButtonType buttonType = new ButtonType("Ok",ButtonBar.ButtonData.OK_DONE);
+
+        dialog.getDialogPane().getButtonTypes().add(buttonType);
+
+        dialog.show();
+    }
 }

@@ -96,6 +96,7 @@ public class GameView extends Application {
         Scene scene = new Scene(hbox);
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     private VBox createBoard(int numRows, int numCols, double cellSize, String boardName) {
