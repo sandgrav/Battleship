@@ -27,6 +27,8 @@ public class GameView extends Application {
     GameController gameController;
     VBox playerBoard;
     VBox enemyBoard;
+
+    // Deklarera och skapa en 2d array för spelaren och fiende spelplan
     private boolean[][] playerBoardBox = new boolean[10][10];
     private boolean[][] enemyBoardBox = new boolean[10][10];
     private boolean gameStarted = false;
@@ -40,7 +42,7 @@ public class GameView extends Application {
 
         HBox hbox = new HBox(200);
         hbox.setAlignment(Pos.CENTER);
-
+        // Skapa spelplaner för spelare och fiende
         playerBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, "Player Board");
         enemyBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, "Enemy Board");
         enemyBoard.setManaged(true);
@@ -48,8 +50,7 @@ public class GameView extends Application {
 
         hbox.getChildren().add(playerBoard);
         hbox.getChildren().add(enemyBoard);
-
-        // Add buttons
+        // Lägg till knappar för att starta som server eller klient
         Button button1 = new Button();
         button1.setText("Start server");
         button1.setOnAction((e) -> {
@@ -85,35 +86,38 @@ public class GameView extends Application {
 
         VBox gameControls = new VBox(startButton, exitButton);
 */
-
+        // Skapa en VBox för knapparna
         VBox gameControls = new VBox(button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
         gameControls.setStyle("-fx-padding: 10;");
 
         hbox.getChildren().add(gameControls);
-
+        // Skapa scenen och visa den
         Scene scene = new Scene(hbox);
         primaryStage.setScene(scene);
         primaryStage.show();
 
     }
 
+    // Skapa spelplanen med etiketter och rutor
     private VBox createBoard(int numRows, int numCols, double cellSize, String boardName) {
         VBox boardVBox = new VBox();
         boardVBox.setAlignment(Pos.CENTER);
 
         Text boardText = new Text(boardName);
         boardVBox.getChildren().add(boardText);
-
+        // Skapa en GridPane för spelplanen
         GridPane gridPane = new GridPane();
         gridPane.setHgap(1);
         gridPane.setVgap(1);
+        // Lägg till bokstäver för raderna (A-J)
         for (int row = 0; row < numRows; row++) {
             Text labelText = new Text(String.valueOf((char) ('A' + row)));
-            labelText.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
+            labelText.setStyle("-fx-font-size: 14; -fx-font-weight: bold;"); //Kollade på youtube
             gridPane.add(labelText, 0, row + 1);
         }
+        // Lägg till siffror för kolumnerna (0-9)
         for (int col = 0; col < numCols; col++) {
             Text labelText = new Text(Integer.toString(col));
             labelText.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
@@ -122,6 +126,7 @@ public class GameView extends Application {
             labelText.setWrappingWidth(cellSize);
             gridPane.add(labelText, col + 1, 0);
         }
+        // Lägg till rutor för varje cell på spelplanen
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 String cellName = String.valueOf((char) ('A' + row)) + col;
@@ -132,14 +137,15 @@ public class GameView extends Application {
                 cell.setId(cellName);
             }
         }
+        // Lägg till GridPane i VBox
         boardVBox.getChildren().add(gridPane);
         return boardVBox;
     }
-
+    // Konstruktor
     public GameView(GameController gameController) {
         this.gameController = gameController;
     }
-
+    // Dölj fiendens skepp på spelplanen
     private void hideEnemyShips(VBox enemyBoard) {
         GridPane enemyGrid = (GridPane) enemyBoard.getChildren().get(1);
         for (int row = 0; row < 10; row++) {
@@ -153,7 +159,7 @@ public class GameView extends Application {
             }
         }
     }
-
+    // Visa spelarens skepp på spelplanen
     private void displayPlayerShips(VBox playerBoard) {
         GridPane playerGrid = (GridPane) playerBoard.getChildren().get(1);
         for (int row = 0; row < 10; row++) {
@@ -167,7 +173,7 @@ public class GameView extends Application {
             }
         }
     }
-
+    // Markera en koordinat på spelplanen
     public void markCoordinate(VBox board, int x, int y) {
         Platform.runLater(() -> {
             GridPane playerGrid = (GridPane) playerBoard.getChildren().get(1);
@@ -177,15 +183,15 @@ public class GameView extends Application {
             playerGrid.add(cell, x + 1, y + 1);
         });
     };
-
+    // Getter för spelarens spelplan
     public VBox getPlayerBoard() {
         return playerBoard;
     }
-
+    // Getter för fiendens spelplan
     public VBox getEnemyBoard() {
         return enemyBoard;
     }
-
+    // Avsluta spelet
     private void exitGame() {
         System.out.println("Game exited.");
         System.exit(0);

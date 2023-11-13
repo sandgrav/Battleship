@@ -71,71 +71,86 @@ public class Ships extends Board {
 
 /*
 import java.util.Random;
-//Alexandros Saltsidis
+
 public class Ships {
-    private int[] playerShipSizes;
-    private int[] enemyShipSizes;
+    private int[] spelarensSkeppsStorlekar; // Array för att lagra skeppsstorlekar för spelaren och fienden
+    private int[] fiendensSkeppsStorlekar;
 
+    // Konstruktor som initialiserar skeppsstorlekarna
     public Ships() {
-        playerShipSizes = new int[]{5, 4, 4, 3, 3, 3, 2, 2, 2, 2};
-        enemyShipSizes = new int[]{5, 4, 4, 3, 3, 3, 2, 2, 2, 2};
+        spelarensSkeppsStorlekar = new int[]{5, 4, 4, 3, 3, 3, 2, 2, 2, 2};
+        fiendensSkeppsStorlekar = new int[]{5, 4, 4, 3, 3, 3, 2, 2, 2, 2};
+        }
+
+    // Getter-metoder för att hämta skeppsstorlekarna
+    public int[] getSpelarensSkeppsStorlekar() {
+        return spelarensSkeppsStorlekar;
     }
 
-    public int[] getPlayerShipSizes() {
-        return playerShipSizes;
+    public int[] getFiendensSkeppsStorlekar() {
+        return fiendensSkeppsStorlekar;
     }
 
-    public int[] getEnemyShipSizes() {
-        return enemyShipSizes;
-    }
+    // Metod för att slumpmässigt placera skepp på spelplanen
+    public void placeraSkeppSlumpmässigt(boolean[][] spelplan, int[] skeppsStorlekar, Random slump) {
+        for (int skeppsStorlek : skeppsStorlekar) {
+            boolean skeppPlacerat = false;
 
-    public void placeShipsRandomly(boolean[][] board, int[] shipSizes, Random random) {
-        for (int shipSize : shipSizes) {
-            boolean shipPlaced = false;
+            // Försök placera skeppet tills det är framgångsrikt placerat
+            while (!skeppPlacerat) {
+                // Slumpmässigt välj position och orientering för skeppet
+                int x = slump.nextInt(10);
+                int y = slump.nextInt(10);
+                boolean vertikalt = slump.nextBoolean();
 
-            while (!shipPlaced) {
-                int x = random.nextInt(10);
-                int y = random.nextInt(10);
-                boolean vertical = random.nextBoolean();
-
-                if (canPlaceShip(x, y, vertical, shipSize, board)) {
-                    if (vertical) {
-                        for (int i = y; i < y + shipSize; i++) {
-                            board[i][x] = true;
+                // Kontrollera om skeppet kan placeras på den valda positionen
+                if (kanPlaceraSkepp(x, y, vertikalt, skeppsStorlek, spelplan)) {
+                    // Placera skeppet på spelplanen
+                    if (vertikalt) {
+                        for (int i = y; i < y + skeppsStorlek; i++) {
+                            spelplan[i][x] = true;
                         }
                     } else {
-                        for (int i = x; i < x + shipSize; i++) {
-                            board[y][i] = true;
+                        for (int i = x; i < x + skeppsStorlek; i++) {
+                            spelplan[y][i] = true;
                         }
                     }
-                    shipPlaced = true;
+                    skeppPlacerat = true;
                 }
             }
         }
     }
-    public boolean canPlaceShip(int x, int y, boolean vertical, int size, boolean[][] board) {
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
 
-        for (int i = 0; i < size; i++) {
-            if (x < 0 || x >= 10 || y < 0 || y >= 10 || board[y][x]) {
-                return false;
+    // Metod för att kontrollera om ett skepp kan placeras på en given position
+    public boolean kanPlaceraSkepp(int x, int y, boolean vertikalt, int storlek, boolean[][] spelplan) {
+        // Array för att definiera olika riktningar runt en given position
+        int[][] riktningar = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+
+        // Iterera genom varje position för det aktuella skeppet
+        for (int i = 0; i < storlek; i++) {
+            // Kontrollera om den aktuella positionen är inom spelplanens gränser och inte redan upptagen
+            if (x < 0 || x >= 10 || y < 0 || y >= 10 || spelplan[y][x]) {
+                return false; // Skeppet kan inte placeras här
             }
 
-            for (int[] dir : directions) {
-                int adjX = x + dir[0];
-                int adjY = y + dir[1];
+            // Kontrollera intilliggande positioner för att säkerställa att skepp inte placeras för nära varandra
+            for (int[] riktning : riktningar) {
+                int adjX = x + riktning[0];
+                int adjY = y + riktning[1];
 
-                if (adjX >= 0 && adjX < 10 && adjY >= 0 && adjY < 10 && board[adjY][adjX]) {
-                    return false;
+                if (adjX >= 0 && adjX < 10 && adjY >= 0 && adjY < 10 && spelplan[adjY][adjX]) {
+                    return false; // Skeppet kan inte placeras här på grund av närhet till ett annat skepp
                 }
             }
-            if (vertical) {
+
+            // Flytta till nästa position baserat på skeppets orientering
+            if (vertikalt) {
                 y++;
             } else {
                 x++;
             }
         }
-        return true;
-    }
+        return true; // Skeppet kan placeras på den valda positionen
+    }}}
 }
 */
