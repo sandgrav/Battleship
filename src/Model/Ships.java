@@ -8,6 +8,10 @@ import java.util.List;
 public class Ships extends Board {
 
     private List<Ship> shipsList;
+//Alexandros Saltsidis
+    public Ships() {
+        this.shipsList = new ArrayList<>();
+    }
 
     public List<Ship> getShipsList(){
         return this.shipsList;

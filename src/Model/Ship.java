@@ -28,7 +28,9 @@ public class Ship {
 
     private Position position;
     private int size;
+    private int hits;
     private Direction direction;
+
     
     private boolean[][] allPositions;
 
@@ -58,5 +60,9 @@ public class Ship {
 
     public void setDirection(Direction direction){
         this.direction = direction;
+    }
+
+    public boolean isSunk() {
+        return hits >= size;
     }
 }
