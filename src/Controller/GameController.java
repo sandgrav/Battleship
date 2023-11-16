@@ -3,7 +3,6 @@ package Controller;
 import Model.*;
 import View.Dialog;
 import View.GameView;
-import javafx.application.Platform;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -76,7 +75,7 @@ public class GameController {
             SendShotToOpponent ();
         }
     }
-
+//Alexandros Saltsidis
     private boolean gameOver() {
         // Kontrollera om spelet är över genom att iterera över alla skepp
         for (Ship ship : ships.getShipsList()) {
@@ -133,12 +132,10 @@ public class GameController {
         // Bearbeta motståndarens skott baserat på kod och skott mottagna
         System.out.println("Opponent " + code + ", skott: " + shot);
 
-        // Exempel: Konvertera skott till position om det representerar koordinater, t.ex. "A1"
+        //Konvertera skott till position om det representerar koordinater, t.ex. "A1"
         if (!code.equals("g")) {
             position = new Position(shot);
         }
-
-        // Implementera ytterligare logik baserat på kod och skott vid behov
     }
 
     private void markLastShotWithCode() {
@@ -156,9 +153,45 @@ public class GameController {
         // Beräkna random skott och kolla om man tidigare har skjutit där
     }
 
+    private String calculateRandomShotText() {
+        // Genererar en array med slumpmässiga koordinater för skottet
+        int[] shot = generateRandomShot();
+
+        // Skapar en sträng med den slumpmässiga skotttexten
+        // (shot[0] + 1) används för att justera från nollindexering till ettindexering
+        // yLabels[shot[1]] används för att hämta den associerade etiketten från yLabels-arrayen
+        return "" + (shot[0] + 1) + yLabels[shot[1]];
+    }
+
     private void SendShotToOpponent() {
-        // skicka sträng till understander med kod och skott
-        // Om kod är q, skicka "game over"
+        try {
+            // Ange rätt kod för skott här
+            String code = "place";
+
+            // Använd din logik för att generera skott här
+            String shot = calculateRandomShotText();
+
+            // Skapa ett meddelande som innehåller skottkoden och skottet
+            String shotMessage = code + " shot " + shot;
+
+            // Skicka skottmeddelandet till motståndaren
+            sendShotMessage(shotMessage);
+        } catch (Exception e) {
+            // Hantera eventuella fel som kan uppstå vid skickande av skott
+            System.err.println(e.getMessage());
+        }
+    }
+    private void sendShotMessage(String message) {
+        try {
+            // Skriver meddelandet till Writer
+            writer.println(message);
+
+            // (flush) PrintWriter för att säkerställa att meddelandet skickas direkt
+            writer.flush();
+        } catch (Exception e) {
+            // Om ett undantag uppstår, skriv ut undantagsmeddelandet till konsolen
+            System.out.println(e.getMessage());
+        }
     }
 
     //Om man är server
