@@ -1,22 +1,26 @@
 package Model;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 
 public class Ship {
+    Position[] positions;
+    boolean[] hits;
+    boolean sunk = false;
 
-    public Ship(int[] start, int size, Direction direction){
-        this.position = new Position(start[0],start[1]);
-        this.size = size;
-        this.direction = direction;
-
-        this.allPositions = new boolean[10][10];
-        
-        
-        if (direction == Direction.HORISONTAL){
-            for (int i = this.position.getX(); i < this.position.getX() + this.size;i++){
-                this.allPositions[i][this.position.getY()] = true;
+    public boolean checkForShip(Position position) {
+        for (int i = 0; i < positions.length - 1; i++) {
+            if (positions[i].equals(position)) {
+                hits[i] = true;
+                sunk = true;
+                for (int j = 0; j < hits.length - 1; j++) {
+                    sunk = sunk && hits[i];
+                }
+                return true;
             }
         }
+
+  /* Alexandros_GameController
         else {
             for (int i = this.position.getY(); i < this.position.getY() + this.size; i++){
                 this.allPositions[this.position.getX()][i] = true;
@@ -37,29 +41,20 @@ public class Ship {
 
     public Position getPosition(){
         return this.position;
+*/
+        return false;
+
     }
 
-    public boolean matchPosition(int x, int y){
-        return this.allPositions[x][y];
+    public Ship(Position[] positions) {
+        this.positions = positions;
+        for (boolean b : hits = new boolean[this.positions.length]) {
+            b = false;
+        }
     }
 
-
-    public int getSize(){
-        return  this.size;
-    }
-
-    public void hitShip(){
-        this.size--;
-    }
-
-
-
-    public Direction getDirection(){
-        return  this.direction;
-    }
-
-    public void setDirection(Direction direction){
-        this.direction = direction;
+    public boolean isSunk() {
+        return sunk;
     }
 
     public boolean isSunk() {
