@@ -23,6 +23,7 @@ public class GameController {
     BufferedReader reader;
     Ships ships = new Ships();
     Shots shots = new Shots();
+    int delay;
     char kod;
     Position position;
 
@@ -31,32 +32,23 @@ public class GameController {
         writer = client.getWriter();
         reader = client.getReader();
 
-//        try {
-            placeShips();
-            //Skicka iväg skott
-            kod = 'i';
-            calculateRandomShot();
-            SendShotToOpponent ();
-            gameloop();
-/*
-        } catch (IOException e) {
-            e.getMessage();
-        }
-*/
+        delay = (int) gameView.getSlider().getValue();
+        placeShips();
+        //Skicka iväg skott
+        kod = 'i';
+        calculateRandomShot();
+        SendShotToOpponent ();
+        gameloop();
     };
 
     Runnable startServer = () -> {
         String string;
         int j = 1;
         server = new Server(port);
-//        try {
-            placeShips();
-            gameloop();
-/*
-        } catch (IOException e) {
-            e.getMessage();
-        }
-*/
+
+        delay = (int) gameView.getSlider().getValue();
+        placeShips();
+        gameloop();
     };
 
     private void gameloop() {
@@ -69,6 +61,8 @@ public class GameController {
             markLastShotWithCode();
             //Hit/miss/sjunkit
             markShotInShips();
+            // Delay for 1 to 5 seconds
+            delayGame();
             //Beräkna skott
             calculateRandomShot();
             //Skicka iväg skott
@@ -149,6 +143,16 @@ public class GameController {
         // Sätt kod till 'q' om alla skepp är borta
     }
 
+    // Morten Sandgrav
+    // Delay for 1 to 5 seconds
+    private void delayGame() {
+        try {
+            Thread.sleep(delay * 1000);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void calculateRandomShot() {
         // Beräkna random skott och kolla om man tidigare har skjutit där
     }
@@ -194,17 +198,10 @@ public class GameController {
         }
     }
 
-    //Om man är server
-    //Starter loop
-
-    //Om man är client
-    //Beräkna skott
-    //Skicka iväg skott
-    //Starter loop
-
-
+    // Amro
     private static final char[] yLabels = {'A','B','C','D','E','F','G','H','I','J'};
 
+/*  Amro
     public String[][] shotLogic(String[][] board,int[] shot){
 
         int x = shot[0] - 1;
@@ -255,6 +252,7 @@ public class GameController {
 
         return board;
     }
+*/
 
         public static int[] generateRandomShot () {
             Random random = new Random();

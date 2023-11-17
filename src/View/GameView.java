@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,6 +28,7 @@ public class GameView extends Application {
     GameController gameController;
     VBox playerBoard;
     VBox enemyBoard;
+    Slider slider;
 
     // Deklarera och skapa en 2d array för spelaren och fiende spelplan
     private boolean[][] playerBoardBox = new boolean[10][10];
@@ -50,7 +52,17 @@ public class GameView extends Application {
 
         hbox.getChildren().add(playerBoard);
         hbox.getChildren().add(enemyBoard);
-        // Lägg till knappar för att starta som server eller klient
+
+        // Morten: Add slider for delay
+        slider = new Slider(1, 5, 1);
+        slider.setShowTickMarks(true);
+        slider.setShowTickLabels(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(0);
+        slider.setSnapToTicks(true);
+        slider.setBlockIncrement(1);
+
+        // Morten: Lägg till knappar för att starta som server eller klient
         Button button1 = new Button();
         button1.setText("Start server");
         button1.setOnAction((e) -> {
@@ -87,7 +99,7 @@ public class GameView extends Application {
         VBox gameControls = new VBox(startButton, exitButton);
 */
         // Skapa en VBox för knapparna
-        VBox gameControls = new VBox(button1, button2);
+        VBox gameControls = new VBox(slider, button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
         gameControls.setStyle("-fx-padding: 10;");
@@ -141,10 +153,12 @@ public class GameView extends Application {
         boardVBox.getChildren().add(gridPane);
         return boardVBox;
     }
-    // Konstruktor
+
+    // Morten: Constructor
     public GameView(GameController gameController) {
         this.gameController = gameController;
     }
+
     // Dölj fiendens skepp på spelplanen
     private void hideEnemyShips(VBox enemyBoard) {
         GridPane enemyGrid = (GridPane) enemyBoard.getChildren().get(1);
@@ -173,7 +187,7 @@ public class GameView extends Application {
             }
         }
     }
-    // Markera en koordinat på spelplanen
+    // Morten: Markera en koordinat på spelplanen
     public void markCoordinate(VBox board, int x, int y) {
         Platform.runLater(() -> {
             GridPane playerGrid = (GridPane) playerBoard.getChildren().get(1);
@@ -214,6 +228,10 @@ public class GameView extends Application {
             }
             button.setDisable(true);
         }
+    }
+
+    public Slider getSlider() {
+        return slider;
     }
 
     // Getter för spelarens spelplan

@@ -41,6 +41,11 @@ public class Ship {
 
     public Position getPosition(){
         return this.position;
+
+
+    public boolean isSunk() {
+        return hits >= size;
+    }
 */
         return false;
 
@@ -55,9 +60,5 @@ public class Ship {
 
     public boolean isSunk() {
         return sunk;
-    }
-
-    public boolean isSunk() {
-        return hits >= size;
     }
 }
