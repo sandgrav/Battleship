@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /** Written by Morten Sandgrav **/
@@ -26,7 +28,8 @@ public class GameController {
     Shots shots = new Shots();
     char kod;
     Position position;
-
+    private List<Ship> shipsList = new ArrayList<>();
+    List<int[]> previousShots = new ArrayList<>();
     Runnable startClient = () -> {
         client = new Client(ipAdress, port) ;
         writer = client.getWriter();
@@ -91,14 +94,79 @@ public class GameController {
         // markera båda i model och UI
     }
 
-    private void markShotInShips() {
+    private boolean markShotInShips() {
         // Markera skott i Ships
         // markera båda i model och UI
-        // Sätt kod till 'q' om alla skepp är borta
+        // Sätt kod till 'g' om alla skepp är borta
+        //--------------------------------
+
+        // Generera slumpmässig skottposition
+        int [] Shot = generateRandomShot();
+        // Loopa genom varje skepp på det aktuella spelbrädet (ships1)
+        for (Ship ship : shipsList) {
+
+            // Ifall skotten träffar de aktuella skeppet-->
+            if (ship.checkForShip(new Position(Shot[0], Shot[1])))  {
+
+                // Ta bort sänkt skepp från listan
+                shipsList.remove(ship);
+
+                // Markera skottet på spelbrädet i UI, indikerar att skeppet träffats
+                gameView.markShotOnBoard(Shot[0], Shot[1], true, gameView.getPlayerBoard());
+
+                // Om alla skepp är sänkta på det aktuella brädet
+                if (shipsList.isEmpty()) {
+                    //Sätt kod til 'g'
+                    kod = 'g';
+                }else {
+                    kod = 'H';
+                }
+
+                return true; // Skottet träffade ett skepp
+
+            }
+        }
+        // Om skottet inte träffade något skepp -->
+        // Markera skottet på spelbrädet i UI som ett missat skott
+        gameView.markShotOnBoard(Shot[0], Shot[1], false, gameView.getPlayerBoard());
+        kod = 'M';
+
+        // Inget skepp träffat
+        return false;
+
     }
 
+
     private void calculateRandomShot() {
-        // Beräkna random skott och kolla om man tidigare har skjutit där
+        //Beräkna random skott och kolla om man tidigare har skjutit där
+        //----------------------------------------------
+
+        // Variabel för att lagra det nya slumpmässiga skottet
+        int[] newShot;
+
+        // Generera ett slumpmässigt skott och kontrollera om det redan har tagits
+        do {
+            newShot = generateRandomShot();
+        } while (hasShotAlreadyBeenTaken(newShot));
+
+        // Skriv ut koordinaterna för det nya skottet till konsolen
+        System.out.println("Nytt skott: (" + newShot[0] + ", " + newShot[1] + ")");
+
+        // Lägg till det nya skottet i listan över tidigare skott
+        previousShots.add(newShot);
+    }
+    private boolean hasShotAlreadyBeenTaken(int[] shot) {
+
+        // Loopa genom varje tidigare skott i listan previousShots
+        for (int[] previousShot : previousShots) {
+
+            // Jämför koordinaterna för det nuvarande och tidigare skott med det givna skottet
+            if (previousShot[0] == shot[0] && previousShot[1] == shot[1]) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     private void SendShotToOpponent() {
@@ -114,8 +182,8 @@ public class GameController {
     //Skicka iväg skott
     //Starter loop
 
-
-    private static final char[] yLabels = {'A','B','C','D','E','F','G','H','I','J'};
+    //AMROS DEL
+    /*private static final char[] yLabels = {'A','B','C','D','E','F','G','H','I','J'};
 
     public String[][] shotLogic(String[][] board,int[] shot){
 
@@ -166,7 +234,7 @@ public class GameController {
 
 
         return board;
-    }
+    }*/
 
         public static int[] generateRandomShot () {
             Random random = new Random();

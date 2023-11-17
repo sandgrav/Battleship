@@ -183,38 +183,36 @@ public class GameView extends Application {
             playerGrid.add(cell, x + 1, y + 1);
         });
     };
-  
-    public void markShotOnPlayerboard(int x, int y, boolean hit){
+
+    //FAHRI
+    public void markShotOnBoard(int x, int y, boolean hit, VBox boardGrid) {
         Platform.runLater(() -> {
-            GridPane playerGrid = (GridPane)  playerBoard.getChildren().get(1);
-            Button button = (Button) playerGrid.getChildren().stream().filter(node -> GridPane.getColumnIndex(node) == x + 1 && GridPane.getRowIndex(node) == y + 1).findFirst().orElse(null);
-            if (button != null){
-                if (hit){
-                    //Träff markeras med röd färg
+            //VBox boardGrid = isPlayerBoard ? playerBoard : enemyBoard;
+            Button button = findButton(boardGrid, x, y);
+
+            if (button != null) {
+                if (hit) {
+                    // Om träff, ändra knappens utseende
                     button.setStyle("-fx-background-color: red;");
                     button.setText("X");
-                }else {
-                    //Miss markeras med grå färg
-                    button.setStyle("-fx-background-color: grey;");
+                } else {
+                    // Om miss, ändra knappens utseende
+                    button.setStyle("-fx-background-color: blue;");
                 }
+
                 // Inaktivera knappen så att den inte kan klickas igen
                 button.setDisable(true);
             }
         });
     }
-    public void markShotOnEnemyboard (int x, int y, boolean hit){
-        GridPane enemyGrid = (GridPane) enemyBoard.getChildren().get(1);
-        Button button = (Button) enemyGrid.getChildren().stream().filter(node -> GridPane.getColumnIndex(node) == x + 1 && GridPane.getRowIndex(node) == y + 1).findFirst().orElse(null);
-        if (button !=null){
-            if (hit){
-                button.setStyle("-fx-background-color: red;");
-                button.setText("X");
-            }else {
-                button.setStyle("-fx-background-color: grey;");
-            }
-            button.setDisable(true);
-        }
+    //FAHRI
+    public Button findButton(VBox boardGrid, int x, int y) {
+        return (Button) boardGrid.getChildren().stream()
+                .filter(node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y)
+                .findFirst()
+                .orElse(null);
     }
+
 
     // Getter för spelarens spelplan
     public VBox getPlayerBoard() {
