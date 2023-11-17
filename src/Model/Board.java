@@ -14,4 +14,12 @@ public abstract class Board {
             }
         }
     }
+
+    public boolean isEmpty(int x, int y) {
+        if (x < 0 || x > 9 || y < 0 || y > 9)
+            return true;
+        else
+            return board[x][y].isEmpty();
+    }
+
 }

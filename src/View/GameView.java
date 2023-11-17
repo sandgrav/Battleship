@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,6 +28,9 @@ public class GameView extends Application {
     GameController gameController;
     VBox playerBoard;
     VBox enemyBoard;
+    Slider slider;
+    Rectangle[][] playerCells;
+    Rectangle[][] enemyCells = new Rectangle[NUMCOLS][NUMROWS];
     private boolean[][] playerBoardBox = new boolean[10][10];
     private boolean[][] enemyBoardBox = new boolean[10][10];
     private boolean gameStarted = false;
@@ -49,7 +53,16 @@ public class GameView extends Application {
         hbox.getChildren().add(playerBoard);
         hbox.getChildren().add(enemyBoard);
 
-        // Add buttons
+        // Morten: Add slider for delay
+        slider = new Slider(1, 5, 1);
+        slider.setShowTickMarks(true);
+        slider.setShowTickLabels(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(0);
+        slider.setSnapToTicks(true);
+        slider.setBlockIncrement(1);
+
+        // Morten: Add buttons
         Button button1 = new Button();
         button1.setText("Start server");
         button1.setOnAction((e) -> {
@@ -86,7 +99,7 @@ public class GameView extends Application {
         VBox gameControls = new VBox(startButton, exitButton);
 */
 
-        VBox gameControls = new VBox(button1, button2);
+        VBox gameControls = new VBox(slider, button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
         gameControls.setStyle("-fx-padding: 10;");
@@ -105,7 +118,6 @@ public class GameView extends Application {
 
         Text boardText = new Text(boardName);
         boardVBox.getChildren().add(boardText);
-
         GridPane gridPane = new GridPane();
         gridPane.setHgap(1);
         gridPane.setVgap(1);
@@ -132,12 +144,19 @@ public class GameView extends Application {
                 cell.setId(cellName);
             }
         }
+
         boardVBox.getChildren().add(gridPane);
         return boardVBox;
     }
 
+    // Morten
     public GameView(GameController gameController) {
         this.gameController = gameController;
+    }
+
+    // Morten
+    public Slider getSlider() {
+        return slider;
     }
 
     private void hideEnemyShips(VBox enemyBoard) {
@@ -168,6 +187,7 @@ public class GameView extends Application {
         }
     }
 
+    // Morten
     public void markCoordinate(VBox board, int x, int y) {
         Platform.runLater(() -> {
             GridPane playerGrid = (GridPane) playerBoard.getChildren().get(1);
@@ -175,13 +195,16 @@ public class GameView extends Application {
             cell.setFill(Color.DARKGRAY);
             cell.setStroke(Color.BLACK);
             playerGrid.add(cell, x + 1, y + 1);
+
         });
     };
 
+    // Morten
     public VBox getPlayerBoard() {
         return playerBoard;
     }
 
+    // Morten
     public VBox getEnemyBoard() {
         return enemyBoard;
     }
