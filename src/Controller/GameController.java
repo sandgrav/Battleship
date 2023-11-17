@@ -3,7 +3,6 @@ package Controller;
 import Model.*;
 import View.Dialog;
 import View.GameView;
-import javafx.application.Platform;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -76,14 +75,67 @@ public class GameController {
             SendShotToOpponent ();
         }
     }
-
+//Alexandros Saltsidis
     private boolean gameOver() {
-        // Kolla om alla egna skepp är borta
-        return false;
+        // Kontrollera om spelet är över genom att iterera över alla skepp
+        for (Ship ship : ships.getShipsList()) {
+            // Om ett skepp inte är sänkt, är spelet inte över
+            if (!ship.isSunk()) {
+                return false;
+            }
+        }
+        // Om alla skepp är sänkta, är spelet över
+        return true;
     }
-
+    //Alexandros Saltsidis
     private void receiveShotFromOpponent() {
-        // läsa sträng från motståndaren och dela upp i kod och skott
+        try {
+            // Läs in motståndarens skott från BufferedReader
+            String receivedString = reader.readLine();
+
+            // Kontrollera om meddelandet är giltigt
+            if (receivedString != null && !receivedString.isEmpty()) {
+                // Skriv ut att ett skott har mottagits från motståndaren
+                System.out.println("Receive shot from opponent: " + receivedString);
+
+                // Bearbeta motståndarens meddelande
+                processOpponentMessage(receivedString);
+            } else {
+                // Skriv ut om ett tomt meddelande mottagits från motståndaren
+                System.out.println("Don't receive shot from opponent.");
+            }
+        } catch (IOException e) {
+            // Hantera eventuella fel vid läsning från motståndaren
+            System.out.println(e.getMessage());
+        }
+    }
+    //Alexandros Saltsidis
+    private void processOpponentMessage(String opponentMessage) {
+        // Dela upp motståndarens meddelande i delar
+        String[] parts = opponentMessage.split(" ");
+
+        // Kontrollera om meddelandet har rätt format
+        if (parts.length == 2) {
+            // Extrahera kod och skott från meddelandet
+            String code = parts[0];
+            String shot = parts[1];
+
+            // Anropa metoden för att hantera motståndarens skott
+            handleOpponentShot(code, shot);
+        } else {
+            // Skriv ut om meddelandet har ogiltigt format
+            System.out.println("Wrong " + opponentMessage);
+        }
+    }
+    //Alexandros Saltsidis
+    private void handleOpponentShot(String code, String shot) {
+        // Bearbeta motståndarens skott baserat på kod och skott mottagna
+        System.out.println("Opponent " + code + ", skott: " + shot);
+
+        //Konvertera skott till position om det representerar koordinater, t.ex. "A1"
+        if (!code.equals("g")) {
+            position = new Position(shot);
+        }
     }
 
     private void markLastShotWithCode() {
@@ -101,9 +153,45 @@ public class GameController {
         // Beräkna random skott och kolla om man tidigare har skjutit där
     }
 
+    private String calculateRandomShotText() {
+        // Genererar en array med slumpmässiga koordinater för skottet
+        int[] shot = generateRandomShot();
+
+        // Skapar en sträng med den slumpmässiga skotttexten
+        // (shot[0] + 1) används för att justera från nollindexering till ettindexering
+        // yLabels[shot[1]] används för att hämta den associerade etiketten från yLabels-arrayen
+        return "" + (shot[0] + 1) + yLabels[shot[1]];
+    }
+
     private void SendShotToOpponent() {
-        // skicka sträng till understander med kod och skott
-        // Om kod är q, skicka "game over"
+        try {
+            // Ange rätt kod för skott här
+            String code = "place";
+
+            // Använd din logik för att generera skott här
+            String shot = calculateRandomShotText();
+
+            // Skapa ett meddelande som innehåller skottkoden och skottet
+            String shotMessage = code + " shot " + shot;
+
+            // Skicka skottmeddelandet till motståndaren
+            sendShotMessage(shotMessage);
+        } catch (Exception e) {
+            // Hantera eventuella fel som kan uppstå vid skickande av skott
+            System.err.println(e.getMessage());
+        }
+    }
+    private void sendShotMessage(String message) {
+        try {
+            // Skriver meddelandet till Writer
+            writer.println(message);
+
+            // (flush) PrintWriter för att säkerställa att meddelandet skickas direkt
+            writer.flush();
+        } catch (Exception e) {
+            // Om ett undantag uppstår, skriv ut undantagsmeddelandet till konsolen
+            System.out.println(e.getMessage());
+        }
     }
 
     //Om man är server
