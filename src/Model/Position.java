@@ -14,12 +14,12 @@ public class Position {
 //    Morten Sandgrav och Alexandros Saltsidis
   public Position(String string){
         char[] chars = string.toCharArray();
-        if (positionString.length() == 2) {
-        this.x = Character.toUpperCase(chars[0]) - 'A';
-        this.y = chars[1] - '0';
-    } else {
-        // Hantera ogiltigt format för positionString
-            throw new IllegalArgumentException("Invalid position string format: " + positionString);
+        if (string.length() == 2) {
+            this.x = Character.toUpperCase(chars[0]) - 'A';
+            this.y = chars[1] - '0';
+        } else {
+            // Hantera ogiltigt format för positionString
+            throw new IllegalArgumentException("Invalid position string format: " + string);
         }
     }
 
