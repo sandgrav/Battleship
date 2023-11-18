@@ -45,9 +45,9 @@ public class GameController {
     };
 
     Runnable startServer = () -> {
-        String string;
-        int j = 1;
         server = new Server(port);
+        writer = server.getWriter();
+        reader = server.getReader();
 
         delay = (int) gameView.getSlider().getValue();
         placeShips();
@@ -72,6 +72,7 @@ public class GameController {
             SendShotToOpponent ();
         }
     }
+
 //Alexandros Saltsidis
     private boolean gameOver() {
         // Kontrollera om spelet är över genom att iterera över alla skepp
@@ -84,6 +85,7 @@ public class GameController {
         // Om alla skepp är sänkta, är spelet över
         return true;
     }
+
     //Alexandros Saltsidis
     private void receiveShotFromOpponent() {
         try {
@@ -106,6 +108,7 @@ public class GameController {
             System.out.println(e.getMessage());
         }
     }
+
     //Alexandros Saltsidis
     private void processOpponentMessage(String opponentMessage) {
         // Dela upp motståndarens meddelande i delar
@@ -124,6 +127,7 @@ public class GameController {
             System.out.println("Wrong " + opponentMessage);
         }
     }
+
     //Alexandros Saltsidis
     private void handleOpponentShot(String code, String shot) {
         // Bearbeta motståndarens skott baserat på kod och skott mottagna
@@ -245,9 +249,6 @@ public class GameController {
             // Skapa ett meddelande som innehåller skottkoden och skottet
             String shotMessage = code + " shot " + shot;
 
-    //AMROS DEL
-    /*private static final char[] yLabels = {'A','B','C','D','E','F','G','H','I','J'};
-    
             // Skicka skottmeddelandet till motståndaren
             sendShotMessage(shotMessage);
         } catch (Exception e) {
@@ -255,6 +256,7 @@ public class GameController {
             System.err.println(e.getMessage());
         }
     }
+
     private void sendShotMessage(String message) {
         try {
             // Skriver meddelandet till Writer
@@ -323,10 +325,6 @@ public class GameController {
         return board;
 
     }*/
-=======
-    }
-*/
-
 
         public static int[] generateRandomShot () {
             Random random = new Random();
