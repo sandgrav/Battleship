@@ -7,7 +7,6 @@ import java.util.Objects;
 /** Written by Morten Sandgrav **/
 
 public class Ships extends Board {
-
     private List<Ship> shipsList = new ArrayList<>();
 
     //Amro

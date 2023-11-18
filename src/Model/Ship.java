@@ -19,7 +19,36 @@ public class Ship {
                 return true;
             }
         }
+
+  /* Alexandros_GameController
+        else {
+            for (int i = this.position.getY(); i < this.position.getY() + this.size; i++){
+                this.allPositions[this.position.getX()][i] = true;
+            }
+        }
+        
+    }
+
+
+    private Position position;
+    private int size;
+    private int hits;
+    private Direction direction;
+
+    
+    private boolean[][] allPositions;
+
+
+    public Position getPosition(){
+        return this.position;
+
+
+    public boolean isSunk() {
+        return hits >= size;
+    }
+*/
         return false;
+
     }
 
     public Ship(Position[] positions) {
