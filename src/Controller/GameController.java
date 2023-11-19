@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.*;
-import View.Dialog;
 import View.GameView;
 
 import java.io.BufferedReader;
@@ -151,18 +150,20 @@ public class GameController {
         //--------------------------------
 
         // Generera slumpmässig skottposition
-        int [] Shot = generateRandomShot();
+        int[] shotCoordinates = generateRandomShot();
         // Loopa genom varje skepp på det aktuella spelbrädet (ships1)
         for (Ship ship : shipsList) {
 
             // Ifall skotten träffar de aktuella skeppet-->
-            if (ship.checkForShip(new Position(Shot[0], Shot[1])))  {
+            if (ship.checkForShip(new Position(shotCoordinates[0], shotCoordinates[1]))) {
 
                 // Ta bort sänkt skepp från listan
                 shipsList.remove(ship);
+                shots.markLastShotAHit(shotCoordinates[0], shotCoordinates[1]);
+
 
                 // Markera skottet på spelbrädet i UI, indikerar att skeppet träffats
-                gameView.markShotOnBoard(Shot[0], Shot[1], true, gameView.getPlayerBoard());
+                gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], true, gameView.getPlayerBoard());
 
                 // Om alla skepp är sänkta på det aktuella brädet
                 if (shipsList.isEmpty()) {
@@ -177,8 +178,11 @@ public class GameController {
             }
         }
         // Om skottet inte träffade något skepp -->
+        // Markera skottet som en miss i Shots-klassen
+        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
+
         // Markera skottet på spelbrädet i UI som ett missat skott
-        gameView.markShotOnBoard(Shot[0], Shot[1], false, gameView.getPlayerBoard());
+        gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerBoard());
         kod = 'M';
 
         // Inget skepp träffat
@@ -210,6 +214,9 @@ public class GameController {
 
         // Skriv ut koordinaterna för det nya skottet till konsolen
         System.out.println("Nytt skott: (" + newShot[0] + ", " + newShot[1] + ")");
+
+        // Anropa metoden i Shots-klassen för att markera skottet
+        shots.markShot(newShot[0], newShot[1]);
 
         // Lägg till det nya skottet i listan över tidigare skott
         previousShots.add(newShot);

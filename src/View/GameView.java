@@ -222,11 +222,14 @@ public class GameView extends Application {
     //FAHRI
     public Button findButton(VBox boardGrid, int x, int y) {
         return (Button) boardGrid.getChildren().stream()
-                .filter(node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y)
+                .filter(node -> {
+                    Integer colIndex = GridPane.getColumnIndex(node);
+                    Integer rowIndex = GridPane.getRowIndex(node);
+                    return (colIndex != null && colIndex == x) && (rowIndex != null && rowIndex == y);
+                })
                 .findFirst()
                 .orElse(null);
     }
-
     public Slider getSlider() {
         return slider;
     }
