@@ -14,7 +14,7 @@ public class Ship {
                 hits[i] = true;
                 sunk = true;
                 for (int j = 0; j < hits.length - 1; j++) {
-                    sunk = sunk && hits[i];
+                    sunk = sunk && hits[j];
                 }
                 return true;
             }

@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -54,6 +55,7 @@ public class GameView extends Application {
         hbox.getChildren().add(enemyBoard);
 
         // Morten: Add slider for delay
+        Label label = new Label("Delay");
         slider = new Slider(1, 5, 1);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
@@ -99,7 +101,7 @@ public class GameView extends Application {
         VBox gameControls = new VBox(startButton, exitButton);
 */
         // Skapa en VBox för knapparna
-        VBox gameControls = new VBox(slider, button1, button2);
+        VBox gameControls = new VBox(label, slider, button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
         gameControls.setStyle("-fx-padding: 10;");
@@ -202,26 +204,38 @@ public class GameView extends Application {
     public void markShotOnBoard(int x, int y, boolean hit, VBox boardGrid) {
         Platform.runLater(() -> {
             //VBox boardGrid = isPlayerBoard ? playerBoard : enemyBoard;
-            Button button = findButton(boardGrid, x, y);
+//            Button button = findButton(boardGrid, x, y);
+            Rectangle button = findButton(boardGrid, x, y);
 
             if (button != null) {
                 if (hit) {
                     // Om träff, ändra knappens utseende
                     button.setStyle("-fx-background-color: red;");
-                    button.setText("X");
+                    //button.setText("X");
                 } else {
                     // Om miss, ändra knappens utseende
                     button.setStyle("-fx-background-color: blue;");
                 }
 
                 // Inaktivera knappen så att den inte kan klickas igen
-                button.setDisable(true);
+                //button.setDisable(true);
             }
         });
     }
     //FAHRI
+    public Rectangle findButton(VBox boardGrid, int x, int y) {
+/*
     public Button findButton(VBox boardGrid, int x, int y) {
         return (Button) boardGrid.getChildren().stream()
+                .filter(node -> {
+                    Integer colIndex = GridPane.getColumnIndex(node);
+                    Integer rowIndex = GridPane.getRowIndex(node);
+                    return (colIndex != null && colIndex == x) && (rowIndex != null && rowIndex == y);
+                })
+                .findFirst()
+                .orElse(null);
+*/
+        return (Rectangle) boardGrid.getChildren().stream()
                 .filter(node -> {
                     Integer colIndex = GridPane.getColumnIndex(node);
                     Integer rowIndex = GridPane.getRowIndex(node);

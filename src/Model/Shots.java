@@ -10,10 +10,23 @@ public class Shots extends Board {
         lastShotY = y;
         board[x][y] = "X";
     }
-    public void markLastShotAHit(int x, int y) {
+    public void markLastShotAHit() {
         board[lastShotX][lastShotY] = "H";
     }
-    public void markLastShotAMiss(int x, int y) {
+
+    public void markLastShotSunk() {
+        board[lastShotX][lastShotY] = "S";
+    }
+
+    public void markLastShotAMiss() {
         board[lastShotX][lastShotY] = "M";
+    }
+
+    public int getLastShotX() {
+        return lastShotX;
+    }
+
+    public int getLastShotY() {
+        return lastShotY;
     }
 }

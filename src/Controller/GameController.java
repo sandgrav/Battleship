@@ -110,37 +110,58 @@ public class GameController {
 
     //Alexandros Saltsidis
     private void processOpponentMessage(String opponentMessage) {
-        // Dela upp motståndarens meddelande i delar
-        String[] parts = opponentMessage.split(" ");
-
-        // Kontrollera om meddelandet har rätt format
-        if (parts.length == 2) {
-            // Extrahera kod och skott från meddelandet
-            String code = parts[0];
-            String shot = parts[1];
-
-            // Anropa metoden för att hantera motståndarens skott
-            handleOpponentShot(code, shot);
+        if (opponentMessage.equalsIgnoreCase("game over")) {
+            kod = 'g';
         } else {
-            // Skriv ut om meddelandet har ogiltigt format
-            System.out.println("Wrong " + opponentMessage);
+            // Dela upp motståndarens meddelande i delar
+            String[] parts = opponentMessage.split(" ");
+
+            // Kontrollera om meddelandet har rätt format
+            if (parts.length == 3) {
+                // Extrahera kod och skott från meddelandet
+                //String code = parts[0];
+                kod = parts[0].charAt(0);
+                String shot = parts[2];
+
+                // Anropa metoden för att hantera motståndarens skott
+                //handleOpponentShot(code, shot);
+                handleOpponentShot(shot);
+            } else {
+                // Skriv ut om meddelandet har ogiltigt format
+                System.out.println("Wrong " + opponentMessage);
+            }
         }
     }
 
     //Alexandros Saltsidis
-    private void handleOpponentShot(String code, String shot) {
+    private void handleOpponentShot(String shot) {
+    //    private void handleOpponentShot(String code, String shot) {
         // Bearbeta motståndarens skott baserat på kod och skott mottagna
-        System.out.println("Opponent " + code + ", skott: " + shot);
+//        System.out.println("Opponent " + code + ", skott: " + shot);
 
         //Konvertera skott till position om det representerar koordinater, t.ex. "A1"
-        if (!code.equals("g")) {
+//        if (!code.equals("g")) {
             position = new Position(shot);
-        }
+//        }
     }
 
     private void markLastShotWithCode() {
         // Markera föregående skott med mottagna kod
         // markera båda i model och UI
+        switch (Character.toUpperCase(kod)) {
+            case 'M':
+                shots.markLastShotAMiss();
+                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), false, gameView.getEnemyBoard());
+                break;
+            case 'H':
+                shots.markLastShotAHit();
+                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), true, gameView.getEnemyBoard());
+                break;
+            case 'S':
+                shots.markLastShotSunk();
+                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), true, gameView.getEnemyBoard());
+                break;
+        }
     }
 
     private boolean markShotInShips() {
@@ -152,6 +173,8 @@ public class GameController {
         // Generera slumpmässig skottposition
         int[] shotCoordinates = generateRandomShot();
         // Loopa genom varje skepp på det aktuella spelbrädet (ships1)
+        kod = ships.checkForShip(new Position(shotCoordinates[0], shotCoordinates[1]));
+/*
         for (Ship ship : shipsList) {
 
             // Ifall skotten träffar de aktuella skeppet-->
@@ -159,7 +182,7 @@ public class GameController {
 
                 // Ta bort sänkt skepp från listan
                 shipsList.remove(ship);
-                shots.markLastShotAHit(shotCoordinates[0], shotCoordinates[1]);
+//                shots.markLastShotAHit(shotCoordinates[0], shotCoordinates[1]);
 
 
                 // Markera skottet på spelbrädet i UI, indikerar att skeppet träffats
@@ -179,12 +202,17 @@ public class GameController {
         }
         // Om skottet inte träffade något skepp -->
         // Markera skottet som en miss i Shots-klassen
-        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
+//        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
 
         // Markera skottet på spelbrädet i UI som ett missat skott
         gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerBoard());
         kod = 'M';
-
+*/
+        if (kod == 'h' || kod == 's') {
+            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], true, gameView.getPlayerBoard());
+        } else {
+            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerBoard());
+        }
         // Inget skepp träffat
         return false;
 
@@ -211,6 +239,8 @@ public class GameController {
         do {
             newShot = generateRandomShot();
         } while (hasShotAlreadyBeenTaken(newShot));
+
+        position = new Position(newShot[0], newShot[1]);
 
         // Skriv ut koordinaterna för det nya skottet till konsolen
         System.out.println("Nytt skott: (" + newShot[0] + ", " + newShot[1] + ")");
@@ -248,13 +278,15 @@ public class GameController {
     private void SendShotToOpponent() {
         try {
             // Ange rätt kod för skott här
-            String code = "place";
+//            String code = "place";
 
             // Använd din logik för att generera skott här
-            String shot = calculateRandomShotText();
+//            String shot = calculateRandomShotText();
 
             // Skapa ett meddelande som innehåller skottkoden och skottet
-            String shotMessage = code + " shot " + shot;
+//            String shotMessage = code + " shot " + shot;
+            int temp = 'A' + position.getX();
+            String shotMessage = kod + " shot " + (char)(temp) + position.getY();
 
             // Skicka skottmeddelandet till motståndaren
             sendShotMessage(shotMessage);
@@ -270,7 +302,7 @@ public class GameController {
             writer.println(message);
 
             // (flush) PrintWriter för att säkerställa att meddelandet skickas direkt
-            writer.flush();
+//            writer.flush();
         } catch (Exception e) {
             // Om ett undantag uppstår, skriv ut undantagsmeddelandet till konsolen
             System.out.println(e.getMessage());
