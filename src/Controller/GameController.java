@@ -166,55 +166,15 @@ public class GameController {
         }
     }
 
+    //FAHRI
     private void markShotInShips() {
-        // Markera skott i Ships
-        // markera båda i model och UI
-        // Sätt kod till 'g' om alla skepp är borta
-        //--------------------------------
-
-        // Generera slumpmässig skottposition
-//        int[] shotCoordinates = generateRandomShot();
         // Loopa genom varje skepp på det aktuella spelbrädet (ships1)
         kod = ships.checkForShip(position);
-/*
-/*
-        for (Ship ship : shipsList) {
 
-            // Ifall skotten träffar de aktuella skeppet-->
-            if (ship.checkForShip(new Position(shotCoordinates[0], shotCoordinates[1]))) {
-
-                // Ta bort sänkt skepp från listan
-                shipsList.remove(ship);
-//                shots.markLastShotAHit(shotCoordinates[0], shotCoordinates[1]);
-
-
-                // Markera skottet på spelbrädet i UI, indikerar att skeppet träffats
-                gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], true, gameView.getPlayerBoard());
-
-                // Om alla skepp är sänkta på det aktuella brädet
-                if (shipsList.isEmpty()) {
-                    //Sätt kod til 'g'
-                    kod = 'g';
-                }else {
-                    kod = 'H';
-                }
-
-                return true; // Skottet träffade ett skepp
-
-            }
-        }
-        // Om skottet inte träffade något skepp -->
-        // Markera skottet som en miss i Shots-klassen
-        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
-
-//        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
-
-        // Markera skottet på spelbrädet i UI som ett missat skott
-        gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerCells());
-        kod = 'M';
-*/
+        // Om träff eller sänkt skepp, markera som träff på spelbrädet i UI
         if (Character.toUpperCase(kod) == 'H' || Character.toUpperCase(kod) == 'S') {
             gameView.markShotOnBoard(position.getX(), position.getY(), true, gameView.getPlayerCells());
+            //Eller markera miss
         } else if (Character.toUpperCase(kod) == 'M') {
             gameView.markShotOnBoard(position.getX(), position.getY(), false, gameView.getPlayerCells());
         }
@@ -368,7 +328,8 @@ public class GameController {
 
     }*/
 
-        public static int[] generateRandomShot () {
+    //FAHRI
+    public static int[] generateRandomShot () {
             Random random = new Random();
             int x = random.nextInt(10); // Slumpmässig x-koordinat för skott
             int y = random.nextInt(10); // Slumpmässig y-koordinat för skott

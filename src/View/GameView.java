@@ -201,38 +201,19 @@ public class GameView extends Application {
 
     //FAHRI
     public void markShotOnBoard(int x, int y, boolean hit, Rectangle[][] cells) {
+        //Ser till att ändringar uppdateras i UI.
         Platform.runLater(() -> {
-            //VBox boardGrid = isPlayerBoard ? playerBoard : enemyBoard;
-//            Button button = findButton(boardGrid, x, y);
-
-//            if (button != null) {
                 if (hit) {
                     // Om träff, ändra knappens utseende
-                    cells[x][y].setStyle("-fx-background-color: red;");
                     cells[x][y].setFill(Color.RED);
-//                    cells[x][y].setText("X");
+
                 } else {
                     // Om miss, ändra knappens utseende
-                    cells[x][y].setStyle("-fx-background-color: blue;");
                     cells[x][y].setFill(Color.BLUE);
                 }
-
-                // Inaktivera knappen så att den inte kan klickas igen
-//                button.setDisable(true);
-//            }
         });
     }
-    //FAHRI
-    public Button findButton(VBox boardGrid, int x, int y) {
-        return (Button) boardGrid.getChildren().stream()
-                .filter(node -> {
-                    Integer colIndex = GridPane.getColumnIndex(node);
-                    Integer rowIndex = GridPane.getRowIndex(node);
-                    return (colIndex != null && colIndex == x) && (rowIndex != null && rowIndex == y);
-                })
-                .findFirst()
-                .orElse(null);
-    }
+
     public Slider getSlider() {
         return slider;
     }

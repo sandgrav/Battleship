@@ -69,8 +69,11 @@ public class Ships extends Board {
         return true;
     }
 
+    //FAHRI
     public char checkForShip(Position position) {
+        //Loopar igenom varje skepp i listan
         for (Ship ship: shipsList) {
+            // Kontrollera om det aktuella skeppet finns på den angivna positionen
             if (ship.checkForShip(position)) {
                 if (ship.isSunk()) {
                     return 's';
