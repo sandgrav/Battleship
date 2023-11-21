@@ -34,6 +34,8 @@ public class GameView extends Application {
     // Deklarera och skapa en 2d array för spelaren och fiende spelplan
     private boolean[][] playerBoardBox = new boolean[10][10];
     private boolean[][] enemyBoardBox = new boolean[10][10];
+    private Rectangle[][] playerCells = new Rectangle[NUMCOLS][NUMROWS];
+    private Rectangle[][] enemyCells = new Rectangle[NUMCOLS][NUMROWS];
     private boolean gameStarted = false;
     private Ships ships;
 
@@ -46,8 +48,8 @@ public class GameView extends Application {
         HBox hbox = new HBox(200);
         hbox.setAlignment(Pos.CENTER);
         // Skapa spelplaner för spelare och fiende
-        playerBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, "Player Board");
-        enemyBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, "Enemy Board");
+        playerBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, playerCells, "Player Board");
+        enemyBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, enemyCells, "Enemy Board");
         enemyBoard.setManaged(true);
         enemyBoard.setVisible(true);
 
@@ -115,7 +117,7 @@ public class GameView extends Application {
     }
 
     // Skapa spelplanen med etiketter och rutor
-    private VBox createBoard(int numRows, int numCols, double cellSize, String boardName) {
+    private VBox createBoard(int numRows, int numCols, double cellSize, Rectangle[][] cells, String boardName) {
         VBox boardVBox = new VBox();
         boardVBox.setAlignment(Pos.CENTER);
 
@@ -144,11 +146,11 @@ public class GameView extends Application {
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 String cellName = String.valueOf((char) ('A' + row)) + col;
-                Rectangle cell = new Rectangle(cellSize, cellSize);
-                cell.setFill(Color.LIGHTCYAN);
-                cell.setStroke(Color.BLACK);
-                gridPane.add(cell, col + 1, row + 1);
-                cell.setId(cellName);
+                cells[row][col] = new Rectangle(cellSize, cellSize);
+                cells[row][col].setFill(Color.LIGHTCYAN);
+                cells[row][col].setStroke(Color.BLACK);
+                gridPane.add(cells[row][col], col + 1, row + 1);
+                cells[row][col].setId(cellName);
             }
         }
         // Lägg till GridPane i VBox
@@ -190,52 +192,39 @@ public class GameView extends Application {
         }
     }
     // Morten: Markera en koordinat på spelplanen
-    public void markCoordinate(VBox board, int x, int y) {
+    public void markCoordinate(Rectangle[][] cells, int x, int y) {
         Platform.runLater(() -> {
-            GridPane playerGrid = (GridPane) playerBoard.getChildren().get(1);
-            Rectangle cell = new Rectangle(CELLSIZE, CELLSIZE);
-            cell.setFill(Color.DARKGRAY);
-            cell.setStroke(Color.BLACK);
-            playerGrid.add(cell, x + 1, y + 1);
+            cells[x][y].setFill(Color.DARKGRAY);
+            cells[x][y].setStroke(Color.BLACK);
         });
     };
 
     //FAHRI
-    public void markShotOnBoard(int x, int y, boolean hit, VBox boardGrid) {
+    public void markShotOnBoard(int x, int y, boolean hit, Rectangle[][] cells) {
         Platform.runLater(() -> {
             //VBox boardGrid = isPlayerBoard ? playerBoard : enemyBoard;
 //            Button button = findButton(boardGrid, x, y);
-            Rectangle button = findButton(boardGrid, x, y);
 
-            if (button != null) {
+//            if (button != null) {
                 if (hit) {
                     // Om träff, ändra knappens utseende
-                    button.setStyle("-fx-background-color: red;");
-                    //button.setText("X");
+                    cells[x][y].setStyle("-fx-background-color: red;");
+                    cells[x][y].setFill(Color.RED);
+//                    cells[x][y].setText("X");
                 } else {
                     // Om miss, ändra knappens utseende
-                    button.setStyle("-fx-background-color: blue;");
+                    cells[x][y].setStyle("-fx-background-color: blue;");
+                    cells[x][y].setFill(Color.BLUE);
                 }
 
                 // Inaktivera knappen så att den inte kan klickas igen
-                //button.setDisable(true);
-            }
+//                button.setDisable(true);
+//            }
         });
     }
     //FAHRI
-    public Rectangle findButton(VBox boardGrid, int x, int y) {
-/*
     public Button findButton(VBox boardGrid, int x, int y) {
         return (Button) boardGrid.getChildren().stream()
-                .filter(node -> {
-                    Integer colIndex = GridPane.getColumnIndex(node);
-                    Integer rowIndex = GridPane.getRowIndex(node);
-                    return (colIndex != null && colIndex == x) && (rowIndex != null && rowIndex == y);
-                })
-                .findFirst()
-                .orElse(null);
-*/
-        return (Rectangle) boardGrid.getChildren().stream()
                 .filter(node -> {
                     Integer colIndex = GridPane.getColumnIndex(node);
                     Integer rowIndex = GridPane.getRowIndex(node);
@@ -256,6 +245,15 @@ public class GameView extends Application {
     public VBox getEnemyBoard() {
         return enemyBoard;
     }
+
+    public Rectangle[][] getPlayerCells() {
+        return playerCells;
+    }
+
+    public Rectangle[][] getEnemyCells() {
+        return enemyCells;
+    }
+
     // Avsluta spelet
     private void exitGame() {
         System.out.println("Game exited.");

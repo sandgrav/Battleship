@@ -151,15 +151,15 @@ public class GameController {
         switch (Character.toUpperCase(kod)) {
             case 'M':
                 shots.markLastShotAMiss();
-                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), false, gameView.getEnemyBoard());
+                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), false, gameView.getEnemyCells());
                 break;
             case 'H':
                 shots.markLastShotAHit();
-                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), true, gameView.getEnemyBoard());
+                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), true, gameView.getEnemyCells());
                 break;
             case 'S':
                 shots.markLastShotSunk();
-                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), true, gameView.getEnemyBoard());
+                gameView.markShotOnBoard(shots.getLastShotX(), shots.getLastShotY(), true, gameView.getEnemyCells());
                 break;
         }
     }
@@ -174,6 +174,7 @@ public class GameController {
         int[] shotCoordinates = generateRandomShot();
         // Loopa genom varje skepp på det aktuella spelbrädet (ships1)
         kod = ships.checkForShip(new Position(shotCoordinates[0], shotCoordinates[1]));
+/*
 /*
         for (Ship ship : shipsList) {
 
@@ -202,16 +203,18 @@ public class GameController {
         }
         // Om skottet inte träffade något skepp -->
         // Markera skottet som en miss i Shots-klassen
+        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
+
 //        shots.markLastShotAMiss(shotCoordinates[0], shotCoordinates[1]);
 
         // Markera skottet på spelbrädet i UI som ett missat skott
-        gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerBoard());
+        gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerCells());
         kod = 'M';
 */
         if (kod == 'h' || kod == 's') {
-            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], true, gameView.getPlayerBoard());
+            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], true, gameView.getPlayerCells());
         } else {
-            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerBoard());
+            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerCells());
         }
         // Inget skepp träffat
         return false;
@@ -388,7 +391,7 @@ public class GameController {
             } while (!ships.placeShip(x, y, ship, direction));
             System.out.println("Ship placed at (" + x + ", " + y + "), length " + ship + " and riktning " + direction);
             for (int i = 0; i < ship; i++) {
-                gameView.markCoordinate(gameView.getPlayerBoard(), x, y);
+                gameView.markCoordinate(gameView.getPlayerCells(), x, y);
                 if (direction == Direction.HORISONTAL) {
                     x++;
                 } else {
