@@ -145,9 +145,11 @@ public class GameController {
 //        }
     }
 
+    //Björn Samuelsson
     private void markLastShotWithCode() {
         // Markera föregående skott med mottagna kod
         // markera båda i model och UI
+
         switch (Character.toUpperCase(kod)) {
             case 'M':
                 shots.markLastShotAMiss();
