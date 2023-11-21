@@ -164,16 +164,16 @@ public class GameController {
         }
     }
 
-    private boolean markShotInShips() {
+    private void markShotInShips() {
         // Markera skott i Ships
         // markera båda i model och UI
         // Sätt kod till 'g' om alla skepp är borta
         //--------------------------------
 
         // Generera slumpmässig skottposition
-        int[] shotCoordinates = generateRandomShot();
+//        int[] shotCoordinates = generateRandomShot();
         // Loopa genom varje skepp på det aktuella spelbrädet (ships1)
-        kod = ships.checkForShip(new Position(shotCoordinates[0], shotCoordinates[1]));
+        kod = ships.checkForShip(position);
 /*
 /*
         for (Ship ship : shipsList) {
@@ -211,13 +211,11 @@ public class GameController {
         gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerCells());
         kod = 'M';
 */
-        if (kod == 'h' || kod == 's') {
-            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], true, gameView.getPlayerCells());
-        } else {
-            gameView.markShotOnBoard(shotCoordinates[0], shotCoordinates[1], false, gameView.getPlayerCells());
+        if (Character.toUpperCase(kod) == 'H' || Character.toUpperCase(kod) == 'S') {
+            gameView.markShotOnBoard(position.getX(), position.getY(), true, gameView.getPlayerCells());
+        } else if (Character.toUpperCase(kod) == 'M') {
+            gameView.markShotOnBoard(position.getX(), position.getY(), false, gameView.getPlayerCells());
         }
-        // Inget skepp träffat
-        return false;
 
     }
 
