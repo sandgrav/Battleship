@@ -1,6 +1,5 @@
 package Model;
 
-import javafx.geometry.Pos;
 
 public class Position {
     private int x;

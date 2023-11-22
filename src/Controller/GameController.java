@@ -58,7 +58,6 @@ public class GameController {
         while (!gameOver()) {
             //Motta skott
             receiveShotFromOpponent();
-            // game over??
             //Markera skott
             markLastShotWithCode();
             //Hit/miss/sjunkit
@@ -267,27 +266,9 @@ public class GameController {
         }
         return false;
     }
-
-    private String calculateRandomShotText() {
-        // Genererar en array med slumpmässiga koordinater för skottet
-        int[] shot = generateRandomShot();
-
-        // Skapar en sträng med den slumpmässiga skotttexten
-        // (shot[0] + 1) används för att justera från nollindexering till ettindexering
-        // yLabels[shot[1]] används för att hämta den associerade etiketten från yLabels-arrayen
-        return "" + (shot[0] + 1) + yLabels[shot[1]];
-    }
-
+//Alexandros Saltsidis
     private void SendShotToOpponent() {
         try {
-            // Ange rätt kod för skott här
-//            String code = "place";
-
-            // Använd din logik för att generera skott här
-//            String shot = calculateRandomShotText();
-
-            // Skapa ett meddelande som innehåller skottkoden och skottet
-//            String shotMessage = code + " shot " + shot;
             int temp = 'A' + position.getX();
             String shotMessage = kod + " shot " + (char)(temp) + position.getY();
 
@@ -303,9 +284,6 @@ public class GameController {
         try {
             // Skriver meddelandet till Writer
             writer.println(message);
-
-            // (flush) PrintWriter för att säkerställa att meddelandet skickas direkt
-//            writer.flush();
         } catch (Exception e) {
             // Om ett undantag uppstår, skriv ut undantagsmeddelandet till konsolen
             System.out.println(e.getMessage());
