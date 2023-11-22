@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/** Written by Morten Sandgrav **/
-
 public class GameController {
     GameView gameView;
     ConnectionType connectionType;
@@ -24,11 +22,14 @@ public class GameController {
     BufferedReader reader;
     Ships ships = new Ships();
     Shots shots = new Shots();
+    Shot shot = new Shot(this);
     int delay;
     char kod;
     Position position;
     private List<Ship> shipsList = new ArrayList<>();
     List<int[]> previousShots = new ArrayList<>();
+
+    // Morten
     Runnable startClient = () -> {
         client = new Client(ipAdress, port) ;
         writer = client.getWriter();
@@ -43,6 +44,7 @@ public class GameController {
         gameloop();
     };
 
+    // Morten
     Runnable startServer = () -> {
         server = new Server(port);
         writer = server.getWriter();
@@ -53,21 +55,48 @@ public class GameController {
         gameloop();
     };
 
+    // Morten
     private void gameloop() {
         //Loop
-        while (!gameOver()) {
+        while (true) {
             //Motta skott
+            System.out.println("receiveShotFromOpponent");
             receiveShotFromOpponent();
+
+            // Check for game over
+            System.out.println("game over");
+            if (Character.toUpperCase(kod) == 'G') {
+                break;
+            }
+
+            //Markera last shot send with code h, m, s received
             //Markera skott
+            System.out.println("markLastShotWithCode");
             markLastShotWithCode();
-            //Hit/miss/sjunkit
+
+            // Check shot from opponent for h, m, s
+            System.out.println("markShotInShips");
             markShotInShips();
+
             // Delay for 1 to 5 seconds
+            System.out.println("delayGame");
             delayGame();
+
             //Beräkna skott
+            System.out.println("calculateRandomShot");
             calculateRandomShot();
+
+            // position = shot.getNextShot(kod, position);
+
             //Skicka iväg skott
+            System.out.println("SendShotToOpponent");
             SendShotToOpponent ();
+
+            // Check for game over
+            System.out.println("game over");
+            if (Character.toUpperCase(kod) == 'G') {
+                break;
+            }
         }
     }
 
@@ -190,7 +219,7 @@ public class GameController {
         }
     }
 
-    private void calculateRandomShot() {
+    public Position calculateRandomShot() {
         //Beräkna random skott och kolla om man tidigare har skjutit där
         //----------------------------------------------
 
@@ -212,6 +241,8 @@ public class GameController {
 
         // Lägg till det nya skottet i listan över tidigare skott
         previousShots.add(newShot);
+
+        return position;
     }
     private boolean hasShotAlreadyBeenTaken(int[] shot) {
 
@@ -315,6 +346,7 @@ public class GameController {
             return shot;
         }
 
+
     private void placeShips() {
         Random random = new Random();
         int x;
@@ -339,6 +371,7 @@ public class GameController {
             }
         }
     };
+
 
     public GameView getGameView() {
         return gameView;

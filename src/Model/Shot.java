@@ -5,24 +5,25 @@ import Controller.GameController;
 import java.util.LinkedList;
 import java.util.Queue;
 
+// Morten
 public class Shot {
+    GameController gameController;
     final Position[] directions = new Position[]{new Position(-1, 0), new Position(0, 1), new Position(1, 0), new Position(0, -1)};
     int direction = 0;
     Position firstHit;
     Queue<Position> oneDirection = new LinkedList<>();
     Queue<Position> theOtherDirection = new LinkedList<>();
 
+    // Morten
     public Position getNextShot(char code, Position position) {
         Position shot = null;
-        int[] temp;
 
         switch (Character.toUpperCase(code)) {
             case 'M':
             case 'I':
                 if (firstHit == null) {
                     // We are looking for a ship
-                    temp = GameController.generateRandomShot();
-                    shot = new Position(temp[0], temp[1]);
+                    shot = gameController.calculateRandomShot();
                 } else {
                     // We have found a ship
                     if ((!oneDirection.isEmpty())) {
@@ -50,8 +51,7 @@ public class Shot {
                 firstHit = null;
                 oneDirection.clear();
                 theOtherDirection.clear();
-                temp = GameController.generateRandomShot();
-                shot = new Position(temp[0], temp[1]);
+                shot = gameController.calculateRandomShot();
                 break;
             case 'H':
                 if (firstHit == null) {
@@ -88,5 +88,9 @@ public class Shot {
         }
 
         return shot;
+    }
+
+    public Shot(GameController gameController) {
+        this.gameController = gameController;
     }
 }
