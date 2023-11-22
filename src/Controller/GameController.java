@@ -60,41 +60,35 @@ public class GameController {
         //Loop
         while (true) {
             //Motta skott
-            System.out.println("receiveShotFromOpponent");
             receiveShotFromOpponent();
 
             // Check for game over
-            System.out.println("game over");
             if (Character.toUpperCase(kod) == 'G') {
+                System.out.println("You win!");
                 break;
             }
 
             //Markera last shot send with code h, m, s received
             //Markera skott
-            System.out.println("markLastShotWithCode");
             markLastShotWithCode();
 
             // Check shot from opponent for h, m, s
-            System.out.println("markShotInShips");
             markShotInShips();
 
             // Delay for 1 to 5 seconds
-            System.out.println("delayGame");
             delayGame();
 
             //Beräkna skott
-            System.out.println("calculateRandomShot");
             calculateRandomShot();
 
             // position = shot.getNextShot(kod, position);
 
             //Skicka iväg skott
-            System.out.println("SendShotToOpponent");
             SendShotToOpponent ();
 
             // Check for game over
-            System.out.println("game over");
             if (Character.toUpperCase(kod) == 'G') {
+                System.out.println("Looser!!");
                 break;
             }
         }
