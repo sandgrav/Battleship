@@ -20,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-//Alexandros Saltsidis
+/**Alexandros Saltsidis**/
 public class GameView extends Application {
 
     final int NUMROWS = 10;
@@ -50,6 +50,7 @@ public class GameView extends Application {
         // Skapa spelplaner för spelare och fiende
         playerBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, playerCells, "Player Board");
         enemyBoard = createBoard(NUMROWS, NUMCOLS, CELLSIZE, enemyCells, "Enemy Board");
+        // Gör fiendens spelplan hanterad och synlig
         enemyBoard.setManaged(true);
         enemyBoard.setVisible(true);
 
@@ -81,7 +82,7 @@ public class GameView extends Application {
             gameController.setConnectionType(ConnectionType.CLIENT);
             dialog.show(gameController);
         });
-/*
+/* Alexandros har lagt två knappar
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> {
             if (!gameStarted) {
@@ -102,7 +103,7 @@ public class GameView extends Application {
 
         VBox gameControls = new VBox(startButton, exitButton);
 */
-        // Skapa en VBox för knapparna
+        // Skapade en VBox för knapparna
         VBox gameControls = new VBox(label, slider, button1, button2);
         gameControls.setAlignment(Pos.CENTER);
         gameControls.setSpacing(20);
@@ -118,18 +119,20 @@ public class GameView extends Application {
 
     // Skapa spelplanen med etiketter och rutor
     private VBox createBoard(int numRows, int numCols, double cellSize, Rectangle[][] cells, String boardName) {
+        // Skapat en vertikal box (VBox) för att organisera komponenter vertikalt på gränssnittet.
         VBox boardVBox = new VBox();
         boardVBox.setAlignment(Pos.CENTER);
 
         Text boardText = new Text(boardName);
         boardVBox.getChildren().add(boardText);
-        // Skapa en GridPane för spelplanen
+        // Skapar en GridPane för att båtarna ska stå inom rutor.
         GridPane gridPane = new GridPane();
         gridPane.setHgap(1);
         gridPane.setVgap(1);
         // Lägg till bokstäver för raderna (A-J)
         for (int row = 0; row < numRows; row++) {
             Text labelText = new Text(String.valueOf((char) ('A' + row)));
+            // Ställer in stilattribut för textetiketten i JavaFX
             labelText.setStyle("-fx-font-size: 14; -fx-font-weight: bold;"); //Kollade på youtube
             gridPane.add(labelText, 0, row + 1);
         }
@@ -162,13 +165,17 @@ public class GameView extends Application {
     public GameView(GameController gameController) {
         this.gameController = gameController;
     }
-
+//Alexandros Saltsidis
     // Dölj fiendens skepp på spelplanen
     private void hideEnemyShips(VBox enemyBoard) {
+        // Hämta GridPane för fiendens spelplan från VBox
         GridPane enemyGrid = (GridPane) enemyBoard.getChildren().get(1);
+        // for loop igenom varje rad och kolumn på spelplanen
         for (int row = 0; row < 10; row++) {
+            // Kontrollera om det finns ett skepp på den aktuella positionen
             for (int col = 0; col < 10; col++) {
                 if (enemyBoardBox[row][col]) {
+                    // Skapa en rektangel för att representera en cell
                     Rectangle cell = new Rectangle(50, 50);
                     cell.setFill(Color.LIGHTCYAN);
                     cell.setStroke(Color.BLACK);
@@ -236,8 +243,8 @@ public class GameView extends Application {
     }
 
     // Avsluta spelet
-    private void exitGame() {
-        System.out.println("Game exited.");
-        System.exit(0);
-    }
+//    private void exitGame() {
+//        System.out.println("Game exited.");
+//        System.exit(0);
+//    }
 }

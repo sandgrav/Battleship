@@ -9,9 +9,11 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) {
+        // Skapa en instans av GameController och GameView
         GameController gameController = new GameController();
         GameView gameView = new GameView(gameController);
         gameController.setGameView(gameView);
+        // Starta spelet genom att initiera JavaFX Scene
         gameView.start(primaryStage);
     }
 }
