@@ -165,6 +165,7 @@ public class GameView extends Application {
     public GameView(GameController gameController) {
         this.gameController = gameController;
     }
+
 //Alexandros Saltsidis
     // Dölj fiendens skepp på spelplanen
     private void hideEnemyShips(VBox enemyBoard) {
@@ -221,6 +222,7 @@ public class GameView extends Application {
         });
     }
 
+    // Morten
     public Slider getSlider() {
         return slider;
     }

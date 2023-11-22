@@ -22,22 +22,27 @@ public class Position {
         }
     }
 
+    // Morten
     public Position addPosition(Position position) {
         return new Position(this.x + position.x, this.y + position.y);
     }
 
+    // Morten
     public Position subtractPosition(Position position) {
         return new Position(this.x - position.x, this.y - position.y);
     }
 
+    // Morten
     public boolean equals(Position position) {
         return this.x == position.x && this.y == position.y;
     }
 
+    // Amro
     public int getX(){
         return  this.x;
     }
 
+    // Amro
     public int getY(){
         return this.y;
     }

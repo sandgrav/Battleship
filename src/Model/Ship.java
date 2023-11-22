@@ -1,5 +1,6 @@
 package Model;
 
+/** Morten Sandgrav **/
 public class Ship {
     Position[] positions;
     boolean[] hits;

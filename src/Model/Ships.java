@@ -13,6 +13,7 @@ public class Ships extends Board {
         return this.shipsList;
     }
 
+    // Morten
     public boolean placeShip(int startX, int startY, int length, Direction direction) {
         Position start = new Position(startX, startY);
         Position positionIncrement;

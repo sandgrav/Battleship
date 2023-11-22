@@ -62,61 +62,6 @@ public class Dialog {
 
         Thread thread;
 
- /*       Runnable startClient = () -> {
-            Client client;
-            String string;
-            int j = 0;
-            if (result.isPresent()) {
-                client = new Client(result.get()[0], Integer.parseInt(result.get()[1])) ;
-                try {
-                    while (true) {
-                        client.getWriter().println(strings[j]);
-                        if (strings[j].equalsIgnoreCase("game over")) {
-                            System.out.println("game over");
-                            break;
-                        }
-                        string = client.getReader().readLine();
-                        if (string.equalsIgnoreCase("game over")) {
-                            System.out.println("game over");
-                            break;
-                        }
-                        else
-                            System.out.println(string);
-                        j+=2;
-                    }
-                } catch (IOException e) {
-                    e.getMessage();
-                }
-            }
-        };
-
-        Runnable startServer = () -> {
-            Server server;
-            String string;
-            int j = 1;
-            if (result.isPresent()) {
-                server = new Server(Integer.parseInt(result.get()[0]));
-                try {
-                    while (true) {
-                        string = server.getReader().readLine();
-                        System.out.println(string);
-                        if (string.equalsIgnoreCase("game over")) {
-                            break;
-                        }
-                        server.getWriter().println(strings[j]);
-                        if (strings[j].equalsIgnoreCase("game over")) {
-                            System.out.println("game over");
-                            break;
-                        }
-                        j+=2;
-                    }
-                } catch (IOException e) {
-                    e.getMessage();
-                }
-            }
-        };
-*/
-
         if (result.isPresent()) {
             if (gameController.getConnectionType() == ConnectionType.CLIENT) {
                 System.out.println("Starter client");
